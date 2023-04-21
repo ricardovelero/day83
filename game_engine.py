@@ -25,28 +25,30 @@ class Engine():
     def check_win(self, player_pos, cur_player):
 
         # All possible winning combinations
-        soln = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7],
-                [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
+        solution = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7],
+                    [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 
         # Loop to check if any winning combination is satisfied
-        for x in soln:
+        for x in solution:
             if all(y in player_pos[cur_player] for y in x):
-
                 # Return True if any winning combination satisfies
                 return True
         # Return False if no combination is satisfied
         return False
 
     # Function to check if the game is drawn
-    def check_draw(self, player_pos):
-        if len(player_pos['X']) + len(player_pos['O']) == 9:
+    def check_draw(self, player_pos, player_1, player_2):
+        if len(player_pos[player_1]) + len(player_pos[player_2]) == 9:
             return True
         return False
 
-    def single_game(self, cur_player):
+    def single_game(self, player_1, player_2):
 
-        # Stores the positions occupied by X and O
-        player_pos = {'X': [], 'O': []}
+        # Stores the positions occupied by players
+        player_pos = {player_1: [], player_2: []}
+
+        # Current player starts with the first one
+        cur_player = player_1
 
         # Game Loop for a single game of Tic Tac Toe
         while True:
@@ -54,26 +56,30 @@ class Engine():
 
             # Try exception block for MOVE input
             try:
-                print("Player ", cur_player, " turn. Which box? : ", end="")
+                print(
+                    f"{cur_player}, please choose a position in the board: ", end="")
                 move = int(input())
             except ValueError:
-                print("Wrong Input!!! Try Again")
+                print(
+                    "Wrong Input. It has to be a number from 1 to 9, which represents the position in the board, please try again.")
                 continue
 
             # Sanity check for MOVE inout
             if move < 1 or move > 9:
-                print("Wrong Input!!! Try Again")
+                print(
+                    "Wrong position number. It has to be a number from 1 to 9, which represents the position in the board, please try again.")
                 continue
 
             # Check if the box is not occupied already
             if self.values[move-1] != ' ':
-                print("Place already filled. Try again!!")
+                print("Position already filled, please try again.")
                 continue
 
-            # Update game information
-
             # Updating grid status
-            self.values[move-1] = cur_player
+            if cur_player == player_1:
+                self.values[move - 1] = 'X'
+            else:
+                self.values[move - 1] = 'O'
 
             # Updating player positions
             player_pos[cur_player].append(move)
@@ -81,19 +87,23 @@ class Engine():
             # Function call for checking win
             if self.check_win(player_pos, cur_player):
                 self.print_tic_tac_toe()
-                print("Player ", cur_player, " has won the game!!")
+                print(f"{cur_player} has won this round!")
                 print("\n")
+                # Reset board
+                self.values = [' ' for x in range(9)]
                 return cur_player
 
             # Function call for checking draw game
-            if self.check_draw(player_pos):
+            if self.check_draw(player_pos, player_1, player_2):
                 self.print_tic_tac_toe()
-                print("Game Drawn")
+                print("It's a draw")
                 print("\n")
+                # Reset board
+                self.values = [' ' for x in range(9)]
                 return 'D'
 
             # Switch player moves
-            if cur_player == 'X':
-                cur_player = 'O'
+            if cur_player == player_1:
+                cur_player = player_2
             else:
-                cur_player = 'X'
+                cur_player = player_1
