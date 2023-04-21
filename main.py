@@ -6,12 +6,9 @@ game = Engine()
 
 if __name__ == "__main__":
 
-    player_1 = input("Player 1, enter your name : ")
+    player_1 = input("Player 1, enter your name : ").title()
 
-    player_2 = input("Player 2, enter your name : ")
-
-    # Stores the choice of players
-    players = {'X': player_1, 'O': player_2}
+    player_2 = input("Player 2, enter your name : ").title()
 
     # Stores the scoreboard
     score_board = {player_1: 0, player_2: 0}
@@ -25,11 +22,10 @@ if __name__ == "__main__":
 
         # Edits the scoreboard according to the winner
         if winner != 'D':
-            player_won = players[winner]
-            score_board[player_won] = score_board[player_won] + 1
+            score_board[winner] = score_board[winner] + 1
 
         scoreboard.print_scoreboard(score_board)
 
-        again = input("Do you want to play again? (Y)es or (N)o?").upper()
+        again = input("Do you want to play again? (Y)es or (N)o? ").upper()
         if again == 'N' or again == 'NO':
             break
