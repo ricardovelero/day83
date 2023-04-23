@@ -25,12 +25,12 @@ class Engine():
     def check_win(self, player_position, current_player):
 
         # All possible winning combinations
-        solution = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7],
-                    [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
+        solutions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7],
+                     [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 
         # Loop to check if any winning combination is satisfied
-        for x in solution:
-            if all(y in player_position[current_player] for y in x):
+        for solution in solutions:
+            if all(item in player_position[current_player] for item in solution):
                 # Return True if any winning combination satisfies
                 return True
         # Return False if no combination is satisfied
